@@ -1,9 +1,7 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
-import SignIn from "./components/auth/SignIn";
-import Signup from "./components/auth/Signup";
+import Banner from "./components/Banner";
+import PlaceCard from "./components/PlaceCard";
+import QualityCard from "./components/QualityCard";
 import UseDatabaseConn from "./hooks/useDatabaseConn";
 
 function App() {
@@ -13,7 +11,11 @@ function App() {
   return (
     <>
       {/* <SignIn /> */}
-      <Signup />
+      {/* <NavBar /> */}
+      <Banner />
+      <QualityCard />
+      <PlaceCard />
+      {/* <Signup /> */}
     </>
   );
 }
