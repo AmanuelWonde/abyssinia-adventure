@@ -16,8 +16,6 @@ const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
 };
 
 const SignIn = () => {
-  const data = UseDatabaseConn();
-  console.log(data);
   return (
     <div className="flex justify-center items-center min-h-screen px-4 lg:px-0 ">
       <Form

@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useEffect } from "react";
+import baseUrl from "../services/base-url";
 
 
 const UseDatabaseConn = () => useEffect(() => {
      // Function to check database connection
     const checkDatabaseConnection = () => {
-      axios.get('http://localhost/abyssinia-adventure/server/index.php')
+      axios.get(`${baseUrl}/index.php`)
         .then(response => {
           console.log('Server response:', response.data);
           return response.data
@@ -16,7 +17,7 @@ const UseDatabaseConn = () => useEffect(() => {
     };
 
     // Call the function when the component mounts
-    checkDatabaseConnection();
+   return checkDatabaseConnection();
 },[]);
 
 export default UseDatabaseConn;
