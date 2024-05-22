@@ -1,8 +1,6 @@
-import React, { useEffect } from "react";
-import { Form, Input, Cascader, AutoComplete, Select, Button } from "antd";
+import { AutoComplete, Button, Form, Input, Select } from "antd";
 import "tailwindcss/tailwind.css";
 import useFormSubmit, { FormData } from "../../hooks/useFormSubmit";
-import UseDatabaseConn from "../../hooks/useDatabaseConn";
 
 const { Option } = Select;
 

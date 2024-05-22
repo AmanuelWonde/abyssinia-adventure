@@ -1,5 +1,4 @@
 import { Card, Rate } from "antd";
-import React from "react";
 
 const { Meta } = Card;
 

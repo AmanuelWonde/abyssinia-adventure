@@ -1,8 +1,7 @@
-import React from "react";
-import { Button, Layout, Menu } from "antd";
+import { Button, Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
-import NavBar from "./NavBar";
 import { ReactTyped } from "react-typed";
+import NavBar from "./NavBar";
 
 const bgImage =
   "https://www.ethiopianadventuretours.com/application/files/1314/6793/1596/Ethiopian-adventure-tours-waterfall.jpg";
