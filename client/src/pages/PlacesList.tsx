@@ -22,7 +22,7 @@ const PlacesList = () => {
     getHouses();
   }, []);
   console.log("Places list: ", placeLists);
-  return <div>PlacesList</div>;
+  return <></>;
 };
 
 export default PlacesList;
