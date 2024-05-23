@@ -2,6 +2,7 @@ import "./App.css";
 import Banner from "./components/Banner";
 import PlaceCard from "./components/PlaceCard";
 import QualityCard from "./components/QualityCard";
+import WhyChooseUs from "./components/WhyChooseUs";
 import UseDatabaseConn from "./hooks/useDatabaseConn";
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
       {/* <SignIn /> */}
       {/* <NavBar /> */}
       <Banner />
-      <QualityCard />
+      <WhyChooseUs />
       <PlaceCard />
       {/* <Signup /> */}
     </>
