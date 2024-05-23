@@ -9,7 +9,7 @@ const bgImage =
 const Banner = () => {
   return (
     <Layout
-      className="relative h-[550px] bg-cover bg-center"
+      className="relative h-[600px] bg-cover bg-center"
       style={{
         backgroundImage: `url(${bgImage})`,
       }}
