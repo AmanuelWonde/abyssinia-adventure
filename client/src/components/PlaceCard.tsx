@@ -12,7 +12,7 @@ const PlaceCard = ({ place }: Props) => {
     <Card
       className="m-6 p-2 hover:shadow-2xl border-2"
       hoverable
-      style={{ width: "300px", height: "400px" }}
+      style={{ width: "300px", height: "auto" }}
       cover={
         <img
           alt="example"

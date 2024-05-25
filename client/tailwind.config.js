@@ -8,6 +8,11 @@ export default {
         coolviolet: "#1C1617",
         coolgray: "#546E7A",
       },
+      breakInside: {
+        avoid: "avoid",
+        "avoid-column": "avoid-column",
+        "avoid-page": "avoid-page",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
       },
@@ -19,6 +24,22 @@ export default {
       }),
     },
   },
+  variants: {
+    extend: {
+      // Enabling breakInside utilities for responsive design if needed
+      breakInside: ["responsive"],
+    },
+  },
 
-  plugins: [require("tailwind-scrollbar")],
+  plugins: [
+    require("tailwind-scrollbar"),
+    function ({ addUtilities }) {
+      addUtilities({
+        ".break-inside-auto": { breakInside: "auto" },
+        ".break-inside-avoid": { breakInside: "avoid" },
+        ".break-inside-avoid-page": { breakInside: "avoid-page" },
+        ".break-inside-avoid-column": { breakInside: "avoid-column" },
+      });
+    },
+  ],
 };
