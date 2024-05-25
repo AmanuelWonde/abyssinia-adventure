@@ -53,13 +53,16 @@ const DetailsPage = ({ place }: Props) => {
             <h2 className="m-2 text-xl font-semibold p-1">Title Of Place</h2>
             <p className="m-2 p-1 text-md">Description of The Place</p>
           </Col>
-          <Col span={6}>
+          <Col
+            className=" max-h-[550px]  overflow-y-scroll scroll-ml-1 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-gray-100 transition-all duration-300"
+            span={6}
+          >
             {/* when mapping change the array to place prop */}
             {array.map((image, index) => (
               <img
                 key={index}
                 src={image}
-                className="object-cover w-full mb-2 hover:translate-y-[2px] transition-all rounded"
+                className="object-cover w-full mb-2 hover:translate-y-[2px] transition-all rounded "
                 onClick={() => setImage(index)}
               />
             ))}
