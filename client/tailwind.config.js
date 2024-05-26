@@ -7,6 +7,7 @@ export default {
         darkbrown: "#4E342E",
         coolviolet: "#1C1617",
         coolgray: "#546E7A",
+        themecolor: "#1890ff",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

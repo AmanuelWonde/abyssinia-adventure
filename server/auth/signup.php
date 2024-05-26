@@ -1,21 +1,13 @@
 <?php
-header('Access-Control-Allow-Origin: http://localhost:5173');
-header('Access-Control-Allow-Origin: *'); // Allow requests from your frontend origin
-header("Access-Control-Allow-Methods:GET, POST, PUT, DELETE, OPTIONS");
-header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, X-Requested-With, Content-Type, Accept');
+header("Access-Control-Allow-Origin: *"); // Allow requests from any origin
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Access-Control-Allow-Headers, X-Requested-With, Content-Type, Accept");
 
-
-include_once(__DIR__ . '/../Database/dbConnection.php'); // Include database connection
+// Include database connection
+include_once(__DIR__ . '/../config/database.php');
 
 // Retrieve data from the POST request
 $data = json_decode(file_get_contents('php://input'), true);
-
-
-if($_SERVER["REQUEST_METHOD"] == "POST") {
-    http_response_code(200);
-    header('Access-Control-Max-Age: Access-Control-Allow-Headers');
-
-}
 
 function test_input($data)
 {
@@ -25,34 +17,49 @@ function test_input($data)
     return $data;
 }
 
-// process form data
+// Check the request method
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    // Initialize database connection
+    $database = new Database();
+    $conn = $database->getConnection();
 
-if($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // http_response_code(200);
+    if ($conn === null) {
+        // Log the error and stop the execution
+        error_log("Database connection failed.");
+        die(json_encode(array("message" => "Database connection failed.")));
+    }
 
     // Perform validation and user creation logic here
-    $firstName =test_input( $data['first_name']);
+    $firstName = test_input($data['first_name']);
     $lastName = test_input($data['last_name']);
     $email = test_input($data['email']);
-    $country =  test_input($data['country']); // Convert country array to a string
+    $country = test_input($data['country']); // Convert country array to a string if necessary
     $phone = test_input($data['phone']);
     $profileImage = test_input($data['profile_image']);
     $gender = test_input($data['gender']);
 
+    // Prepare SQL statement using PDO
+    $stmt = $conn->prepare("INSERT INTO user (first_name, last_name, email, country, phone_number, profile_image, gender) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    if ($stmt === false) {
+        error_log("Failed to prepare statement: " . print_r($conn->errorInfo(), true));
+        die(json_encode(array("message" => "Failed to prepare statement.")));
+    }
 
-// Insert data into the database using prepared statements
-$stmt = $conn->prepare("INSERT INTO user (first_name, last_name, email, country, phone, profile_image, gender) VALUES ('$firstName', '$lastName', '$email', '$country', '$phone', '$profileImage', '$gender') VALUES (?,?,?,?,?,?,?)");
-$stmt->bind_param("sssssss", $firstName, $lastName, $email, $country, $phone,  $profileImage, $gender );
+    // Bind parameters using PDO
+    $execute = $stmt->execute([$firstName, $lastName, $email, $country, $phone, $profileImage, $gender]);
+    if ($execute) {
+        $response = array('success' => true, 'message' => "User Created Successfully");
+        echo json_encode($response);
+    } else {
+        error_log("Failed to execute statement: " . print_r($stmt->errorInfo(), true));
+        $response = array('success' => false, 'message' => 'Error has occurred. Cannot create User.');
+        echo json_encode($response);
+    }
 
-if ($stmt -> execute()) {
-    $response = array('success' => true, 'message' => "User Created Successfully");
-    echo json_encode($response);
+    // Close the connection
+    $conn = null;
 } else {
-    $response = array('success' => false, 'message' => 'Error has occured. Can not create User.');
-    echo json_encode($response);
+    // If the request method is not POST, return an error message
+    echo json_encode(array("message" => "Invalid request method."));
 }
-   $stmt->close();
-}
-?>

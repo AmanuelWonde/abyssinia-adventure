@@ -1,6 +1,4 @@
 import { Button, Form, FormProps, Input } from "antd";
-import React from "react";
-import UseDatabaseConn from "../../hooks/useDatabaseConn";
 
 type FieldType = {
   username?: string;

@@ -1,5 +1,4 @@
 import { Breadcrumb, Col, Row } from "antd";
-import React from "react";
 import { HomeOutlined, UserOutlined } from "@ant-design/icons";
 
 const DetailsPage = () => {

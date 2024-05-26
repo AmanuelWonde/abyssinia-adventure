@@ -5,7 +5,7 @@ const { Meta } = Card;
 const PlaceCard = () => {
   return (
     <Card
-      className="m-6 p-2 hover:shadow-2xl border-2"
+      className="m-6 p-2 hover:shadow-2xl border-2 min-w-fit"
       hoverable
       style={{ width: "300px", height: "400px" }}
       cover={

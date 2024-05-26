@@ -5,10 +5,11 @@ import useFormSubmit, { FormData } from "../../hooks/useFormSubmit";
 const { Option } = Select;
 
 const Signup = () => {
-  const { setFormData, loading, error } = useFormSubmit();
+  const { setFormData, formData } = useFormSubmit();
 
   const onFinish = (values: FormData) => {
     setFormData(values);
+    console.log(values);
   };
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 lg:px-0">
@@ -32,7 +33,7 @@ const Signup = () => {
               },
             ]}
           >
-            <Input />
+            <Input value={formData?.first_name} />
           </Form.Item>
           <Form.Item
             name="last_name"
@@ -45,7 +46,7 @@ const Signup = () => {
               },
             ]}
           >
-            <Input />
+            <Input value={formData?.last_name} />
           </Form.Item>
           <Form.Item
             name="email"
@@ -61,7 +62,7 @@ const Signup = () => {
               },
             ]}
           >
-            <Input />
+            <Input value={formData?.email} />
           </Form.Item>
 
           <Form.Item
@@ -76,7 +77,7 @@ const Signup = () => {
           >
             {/* <Cascader /> */}
 
-            <Input />
+            <Input value={formData?.country} />
           </Form.Item>
 
           <Form.Item
@@ -100,7 +101,7 @@ const Signup = () => {
             ]}
           >
             <AutoComplete placeholder="URL">
-              <Input />
+              <Input value={formData?.profile_image} />
             </AutoComplete>
           </Form.Item>
 
@@ -109,10 +110,9 @@ const Signup = () => {
             label="Gender"
             rules={[{ required: true, message: "Please select gender!" }]}
           >
-            <Select placeholder="Select your gender">
-              <Option value="male">Male</Option>
-              <Option value="female">Female</Option>
-              <Option value="other">Other</Option>
+            <Select placeholder="Select your gender" value={formData?.gender}>
+              <Option value="M">Male</Option>
+              <Option value="F">Female</Option>
             </Select>
           </Form.Item>
 
