@@ -8,8 +8,10 @@ export interface FormData {
   email: string;
   country: string;
   phone: string;
+  password: string;
   profile_image: string;
   gender: string;
+  remember_me: true;
 }
 
 const useFormSubmit = () => {
@@ -29,9 +31,11 @@ const useFormSubmit = () => {
           `http://localhost:8000/auth/signup.php`,
           data
         );
-        if (res.statusText === "OK") {
+        if (res.data.success) {
           setFormData(null);
-          navigate("/");
+          navigate("/auth/login");
+        } else {
+          alert(res.data.errors);
         }
       } catch (error) {
         console.log(error);

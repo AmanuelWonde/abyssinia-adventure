@@ -14,7 +14,7 @@ const Banner = () => {
         backgroundImage: `url(${bgImage})`,
       }}
     >
-      <NavBar />
+      <NavBar color="" />
       <Content className="flex flex-col items-start justify-center h-full text-center text-slate-300 p-6 bg-black bg-opacity-40">
         <div className="absolute flex flex-col justify-center items-start text-slate-300 p-6 md:ml-10">
           <ReactTyped

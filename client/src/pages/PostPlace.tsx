@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Image, Upload, Input, Form, Button } from "antd";
+import { Image, Upload, Input, Form, Button, Select } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 import axios from "axios";
+import Navbar from "../components/NavBar";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -21,6 +22,7 @@ interface FormData {
   location: string;
   city: string;
   region: string;
+  category: string;
 }
 const PostPlace = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -33,6 +35,7 @@ const PostPlace = () => {
     location: "",
     city: "",
     region: "",
+    category: "",
   });
 
   const handlePreview = async (file: UploadFile) => {
@@ -82,6 +85,7 @@ const PostPlace = () => {
           location: "",
           city: "",
           region: "",
+          category: "",
         });
         setFileList([]);
       }
@@ -90,100 +94,129 @@ const PostPlace = () => {
     }
   };
   return (
-    <Form>
-      <div className=" md:flex space-x-6 ">
-        <div className=" space-y-6 w-[50%] p-6">
-          <div className=" flex space-x-6">
-            <Form.Item label="Place name">
-              <Input
-                placeholder="Fassiledes"
-                name="name"
-                value={placeDatas.name}
-                onChange={(e) =>
-                  setPlaceDatas({ ...placeDatas, name: e.target.value })
-                }
-              />
-            </Form.Item>
-            <Form.Item label="Location">
-              <Input
-                placeholder="Arounde tana"
-                name="location"
-                value={placeDatas.location}
-                onChange={(e) =>
-                  setPlaceDatas({ ...placeDatas, location: e.target.value })
-                }
-              />
-            </Form.Item>
-          </div>
-          <div className="">
+    <>
+      <Navbar color="bg-gray-900" />
+
+      <Form layout="vertical" className=" w-full flex justify-center mt-16">
+        <div className=" w-[50%] bg-slate-100 p-6 rounded mt-4">
+          <div className=" p-6 ">
+            <div className=" flex space-x-8">
+              <Form.Item label="Place name">
+                <Input
+                  style={{ width: 200 }}
+                  placeholder="Fassiledes"
+                  name="name"
+                  value={placeDatas.name}
+                  onChange={(e) =>
+                    setPlaceDatas({ ...placeDatas, name: e.target.value })
+                  }
+                />
+              </Form.Item>
+              <Form.Item label="Location">
+                <Input
+                  style={{ width: 200 }}
+                  placeholder="Arounde tana"
+                  name="location"
+                  value={placeDatas.location}
+                  onChange={(e) =>
+                    setPlaceDatas({ ...placeDatas, location: e.target.value })
+                  }
+                />
+              </Form.Item>
+              <Form.Item label="Category">
+                <Select
+                  value={placeDatas.category}
+                  style={{ width: 200 }}
+                  onChange={(value) =>
+                    setPlaceDatas({ ...placeDatas, category: value })
+                  }
+                  options={[
+                    { value: "Popular place", label: "Popular place" },
+                    {
+                      value: "Historical and Cultural Heritage",
+                      label: "Historical and Cultural Heritage",
+                    },
+                    {
+                      value: "Natural Wonders and Adventure",
+                      label: "Natural Wonders and Adventure",
+                    },
+                    {
+                      value: "Religious and Spiritual Journeys",
+                      label: "Religious and Spiritual Journeys",
+                    },
+                  ]}
+                />
+              </Form.Item>
+            </div>
+
             <Form.Item label="About place" name={"description"}>
               <TextArea
                 rows={4}
                 value={placeDatas.description}
-                placeholder="maxLength is 6"
+                placeholder="Place description here"
                 onChange={(e) =>
                   setPlaceDatas({ ...placeDatas, description: e.target.value })
                 }
               />
             </Form.Item>
-          </div>
-          <div className=" flex space-x-6">
-            <Form.Item label="Region">
-              <Input
-                placeholder="Amhara"
-                name="region"
-                value={placeDatas.region}
-                onChange={(e) =>
-                  setPlaceDatas({ ...placeDatas, region: e.target.value })
-                }
-              />
-            </Form.Item>
+            <div className=" flex space-x-8">
+              <Form.Item label="Region">
+                <Input
+                  placeholder="Amhara"
+                  name="region"
+                  value={placeDatas.region}
+                  onChange={(e) =>
+                    setPlaceDatas({ ...placeDatas, region: e.target.value })
+                  }
+                />
+              </Form.Item>
 
-            <Form.Item label="City">
-              <Input
-                placeholder="Bahirdar"
-                name="city"
-                value={placeDatas.city}
-                onChange={(e) =>
-                  setPlaceDatas({ ...placeDatas, city: e.target.value })
-                }
-              />
-            </Form.Item>
+              <Form.Item label="City">
+                <Input
+                  placeholder="Bahirdar"
+                  name="city"
+                  value={placeDatas.city}
+                  onChange={(e) =>
+                    setPlaceDatas({ ...placeDatas, city: e.target.value })
+                  }
+                />
+              </Form.Item>
+            </div>
           </div>
-        </div>
-        <div className=" pt-6 w-[500px] relative">
-          <Upload
-            listType="picture-card"
-            fileList={fileList}
-            onPreview={handlePreview}
-            onChange={handleChange}
+          <div className=" pb-3">
+            <Upload
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+            >
+              {fileList.length >= 8 ? null : uploadButton}
+            </Upload>
+            {previewImage && (
+              <Image
+                width={"89px"}
+                wrapperStyle={{ display: "none" }}
+                preview={{
+                  visible: previewOpen,
+                  onVisibleChange: (visible) => setPreviewOpen(visible),
+                  afterOpenChange: (visible) => !visible && setPreviewImage(""),
+                }}
+                src={previewImage}
+                className=""
+              />
+            )}
+          </div>
+          <Button
+            type="primary"
+            className=" ml-6"
+            size="large"
+            onClick={handlePostPlace}
           >
-            {fileList.length >= 8 ? null : uploadButton}
-          </Upload>
-          {previewImage && (
-            <Image
-              width={"89px"}
-              wrapperStyle={{ display: "none" }}
-              preview={{
-                visible: previewOpen,
-                onVisibleChange: (visible) => setPreviewOpen(visible),
-                afterOpenChange: (visible) => !visible && setPreviewImage(""),
-              }}
-              src={previewImage}
-              className=""
-            />
-          )}
+            Post Place
+          </Button>
         </div>
-      </div>
-      <Button
-        type="primary"
-        className=" ml-6"
-        size="large"
-        onClick={handlePostPlace}
-      >
-        Post Place
-      </Button>
-    </Form>
+      </Form>
+    </>
   );
 };
 

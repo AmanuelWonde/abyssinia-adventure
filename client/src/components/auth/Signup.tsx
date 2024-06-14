@@ -12,7 +12,7 @@ const Signup = () => {
     console.log(values);
   };
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 lg:px-0">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 lg:px-0 py-8">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
         <h2 className="text-2xl font-semibold text-center mb-6">Register</h2>
         <Form
@@ -63,6 +63,22 @@ const Signup = () => {
             ]}
           >
             <Input value={formData?.email} />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="Password"
+            rules={[
+              {
+                type: "string",
+                message: "The input is not valid Password!",
+              },
+              {
+                required: true,
+                message: "Please input your Password!",
+              },
+            ]}
+          >
+            <Input value={formData?.password} />
           </Form.Item>
 
           <Form.Item

@@ -79,9 +79,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $location = isset($_POST['location']) ? htmlspecialchars(strip_tags($_POST['location'])) : '';
     $city = isset($_POST['city']) ? htmlspecialchars(strip_tags($_POST['city'])) : '';
     $region = isset($_POST['region']) ? htmlspecialchars(strip_tags($_POST['region'])) : '';
+    $category = isset($_POST['category']) ? htmlspecialchars(strip_tags($_POST['category'])) : '';
 
     // Insert place data into the database
-    $query = "INSERT INTO Place (name, description, location, city, region) VALUES (:name, :description, :location, :city, :region)";
+    $query = "INSERT INTO Place (name, description, location, city, region, category) VALUES (:name, :description, :location, :city, :region, :category)";
     $stmt = $db->prepare($query);
     if ($stmt === false) {
         error_log("Failed to prepare statement: " . print_r($db->errorInfo(), true));
@@ -93,6 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bindParam(':location', $location);
     $stmt->bindParam(':city', $city);
     $stmt->bindParam(':region', $region);
+    $stmt->bindParam(':category', $category);
 
     if ($stmt->execute()) {
         $place_id = $db->lastInsertId();
@@ -116,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         error_log("Error executing statement: " . print_r($stmt->errorInfo(), true));
     }
 
-    echo json_encode(array("messages" => $messages, "formData" => compact('name', 'description', 'location', 'city', 'region')));
+    echo json_encode(array("messages" => $messages, "formData" => compact('name', 'description', 'location', 'city', 'region', 'category')));
 } else {
     echo json_encode(array("message" => "No files or form data were uploaded."));
 }

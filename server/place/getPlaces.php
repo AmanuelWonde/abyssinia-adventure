@@ -19,11 +19,19 @@ if ($db === null) {
     die(json_encode(array("message" => "Database connection failed.")));
 }
 
-// Query to fetch all places with their images
+// Get the category from the URL
+$category = isset($_GET['category']) ? $_GET['category'] : null;
+
+if ($category === null) {
+    die(json_encode(array("message" => "Category not specified.")));
+}
+
+// Query to fetch all places with their images based on category
 $query = "
     SELECT p.id, p.name, p.description, p.location, p.city, p.region, pi.image
     FROM Place p
     LEFT JOIN PlaceImages pi ON p.id = pi.place_id
+    WHERE p.category = :category
     ORDER BY p.id
 ";
 $stmt = $db->prepare($query);
@@ -33,6 +41,7 @@ if ($stmt === false) {
     die(json_encode(array("message" => "Failed to prepare statement.")));
 }
 
+$stmt->bindParam(':category', $category, PDO::PARAM_STR);
 $stmt->execute();
 
 $places = array();

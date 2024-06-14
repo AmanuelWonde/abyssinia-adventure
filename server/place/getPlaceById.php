@@ -5,7 +5,6 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET");
 
-
 // Include database configuration
 include_once '../config/database.php';
 
@@ -26,12 +25,11 @@ if ($place_id <= 0) {
     die(json_encode(array("message" => "Invalid place ID.")));
 }
 
-// Query to fetch the place with its images
+// Query to fetch the place details
 $query = "
-    SELECT p.id, p.name, p.description, p.location, p.city, p.region, pi.image
-    FROM Place p
-    LEFT JOIN PlaceImages pi ON p.id = pi.place_id
-    WHERE p.id = :place_id
+    SELECT id, name, description, location, city, region
+    FROM Place
+    WHERE id = :place_id
 ";
 $stmt = $db->prepare($query);
 
@@ -43,27 +41,36 @@ if ($stmt === false) {
 $stmt->bindParam(':place_id', $place_id, PDO::PARAM_INT);
 $stmt->execute();
 
-$place = null;
+$place = $stmt->fetch(PDO::FETCH_ASSOC);
 
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    if ($place === null) {
-        $place = array(
-            "id" => $row['id'],
-            "name" => $row['name'],
-            "description" => $row['description'],
-            "location" => $row['location'],
-            "city" => $row['city'],
-            "region" => $row['region'],
-            "images" => array()
-        );
-    }
-    if ($row['image'] !== null) {
-        $place['images'][] = $row['image'];
-    }
-}
-
-if ($place !== null) {
-    echo json_encode($place);
-} else {
+if ($place === false) {
     echo json_encode(array("message" => "Place not found."));
+    exit;
 }
+
+// Initialize the images array
+$place['images'] = array();
+
+// Query to fetch the images for the place
+$image_query = "
+    SELECT image
+    FROM PlaceImages
+    WHERE place_id = :place_id
+";
+$image_stmt = $db->prepare($image_query);
+
+if ($image_stmt === false) {
+    error_log("Failed to prepare image statement: " . print_r($db->errorInfo(), true));
+    die(json_encode(array("message" => "Failed to prepare image statement.")));
+}
+
+$image_stmt->bindParam(':place_id', $place_id, PDO::PARAM_INT);
+$image_stmt->execute();
+
+while ($image_row = $image_stmt->fetch(PDO::FETCH_ASSOC)) {
+    if ($image_row['image'] !== null) {
+        $place['images'][] = $image_row['image'];
+    }
+}
+
+echo json_encode($place);
