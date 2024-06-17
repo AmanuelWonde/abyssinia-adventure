@@ -1,111 +1,128 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { Table, Tag, Space } from "antd";
+import Navbar from "../components/NavBar";
 
-const Profile = () => {
+// Importing Ant Design styles (ensure you have the correct path)
+import "antd/dist/reset.css";
+
+interface UserType {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  country: string;
+  phone: string;
+  gender: string;
+}
+
+const Profile: React.FC = () => {
   const username = Cookies.get("username");
   const isAdmin = username === "emailemail@gmail.com";
-  const [users, setUsers] = useState<any>([]);
-  const [error, setError] = useState("");
+  const [users, setUsers] = useState<UserType[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isAdmin) {
-      // Fetch all users if the logged-in user is an admin
-      const fetchUsers = async () => {
-        try {
-          const response = await axios.get(
-            "http://localhost/abyssinia-adventure/server/Report/getAllUsersReport.php"
-          );
-          if (response.data.success) {
-            setUsers(response.data.data);
-          } else {
-            setError("Failed to fetch users.");
-          }
-        } catch (error) {
-          console.error("Error fetching users:", error);
-          setError("An error occurred while fetching users.");
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost/abyssinia-adventure/server/Report/getAllUsersReport.php"
+        );
+        if (response.data.success) {
+          setUsers(response.data.data);
+        } else {
+          setError("Failed to fetch users.");
         }
-      };
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        setError("An error occurred while fetching users.");
+      }
+    };
 
+    if (isAdmin) {
       fetchUsers();
     }
   }, [isAdmin]);
 
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      render: (text: string, record: UserType) => (
+        <Space size="middle">
+          {record.first_name} {record.last_name}
+        </Space>
+      ),
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Country",
+      dataIndex: "country",
+      key: "country",
+    },
+    {
+      title: "Phone",
+      dataIndex: "phone",
+      key: "phone",
+    },
+    {
+      title: "Gender",
+      dataIndex: "gender",
+      key: "gender",
+      render: (text: string) => (
+        <Tag
+          color={
+            text === "Male" ? "blue" : text === "Female" ? "pink" : "green"
+          }
+        >
+          {text}
+        </Tag>
+      ),
+    },
+  ];
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
-        <h1 className="text-3xl font-semibold text-center mb-4">
-          Profile Page
-        </h1>
-        {username ? (
-          <div>
-            <p className="text-lg text-center mb-4">Welcome, {username}</p>
-            {isAdmin && (
-              <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                <h2 className="text-2xl font-semibold text-center mb-2">
-                  Admin Panel
-                </h2>
-                <p className="text-center">
-                  You have administrative privileges.
-                </p>
-                {error ? (
-                  <p className="text-red-500 text-center">{error}</p>
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full bg-white border-gray-200 shadow-md rounded-lg overflow-hidden">
-                      <thead className="bg-gray-100 text-gray-700">
-                        <tr>
-                          <th className="py-2 px-4 border-b border-gray-200">
-                            Name
-                          </th>
-                          <th className="py-2 px-4 border-b border-gray-200">
-                            Email
-                          </th>
-                          <th className="py-2 px-4 border-b border-gray-200">
-                            Country
-                          </th>
-                          <th className="py-2 px-4 border-b border-gray-200">
-                            Phone
-                          </th>
-                          <th className="py-2 px-4 border-b border-gray-200">
-                            Gender
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="text-gray-600">
-                        {users.map((user: any) => (
-                          <tr key={user.id} className="hover:bg-gray-50">
-                            <td className="py-2 px-4 border-b border-gray-200">
-                              {user.first_name} {user.last_name}
-                            </td>
-                            <td className="py-2 px-4 border-b border-gray-200">
-                              {user.email}
-                            </td>
-                            <td className="py-2 px-4 border-b border-gray-200">
-                              {user.country}
-                            </td>
-                            <td className="py-2 px-4 border-b border-gray-200">
-                              {user.phone}
-                            </td>
-                            <td className="py-2 px-4 border-b border-gray-200">
-                              {user.gender}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </div>
+    <>
+      <Navbar color="bg-gray-700" />
+      <div className="min-h-screen bg-gray-100">
+        <div className="flex justify-start items-start py-8 px-4">
+          <div className="w-full max-w-screen-xl mx-auto">
+            <h1 className="text-3xl font-semibold mb-4 pt-10">
+              Welcome to the Admin Panel
+            </h1>
+            {username && (
+              <p className="text-lg mb-4">
+                Logged in as:{" "}
+                <span className="text-2xl font-bold text-gray-800">
+                  {username}
+                </span>
+              </p>
             )}
+            {isAdmin ? (
+              <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                <Table
+                  dataSource={users}
+                  columns={columns}
+                  bordered
+                  pagination={{ pageSize: 10 }} // Adjust page size as needed
+                />
+              </div>
+            ) : (
+              <p className="text-lg mt-4">
+                You are not authorized to view this page.
+              </p>
+            )}
+            {error && <p className="text-red-500 mt-4">Error: {error}</p>}
           </div>
-        ) : (
-          <p className="text-lg text-center">
-            Please log in to view your profile.
-          </p>
-        )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
