@@ -5,7 +5,6 @@ header("Access-Control-Allow-Origin: *"); // Allow requests from any origin
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Access-Control-Allow-Headers, X-Requested-With, Content-Type, Accept");
 
-
 // Include database connection
 include_once(__DIR__ . '/../config/database.php');
 
@@ -120,9 +119,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             setcookie('username', $email, time() + (30 * 24 * 60 * 60), "/");
         }
 
-        // Send a welcome email
-        sendWelcomeEmail($email, $firstName);
-
         $response = array('success' => true, 'message' => "User Created Successfully", 'session' => $_SESSION);
         echo json_encode($response);
     } else {
@@ -137,31 +133,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // If the request method is not POST, return an error message
     echo json_encode(array("message" => "Invalid request method."));
 }
-
-// Function to send a welcome email using mail() function with TLS
-function sendWelcomeEmail($to, $firstName) {
-    // Set SMTP configuration dynamically
-    ini_set('SMTP', 'smtp.gmail.com');
-    ini_set('smtp_port', 587);
-    ini_set('sendmail_from', 'ammarmyp@gmail.com');
-    
-    // Construct the email headers
-    $headers = "From: ammarmyp@gmail.com\r\n";
-    $headers .= "Reply-To: ammarmyp@gmail.com\r\n";
-    $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-    $headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
-    $headers .= "X-Originating-IP: " . $_SERVER['SERVER_ADDR'] . "\r\n";
-
-    // Compose the email content
-    $subject = 'Welcome to Our Service';
-    $message = "Dear $firstName,<br><br>Welcome to our service! We are glad to have you with us.<br><br>Best regards,<br>Your Company";
-
-    // Send the email
-    if (mail($to, $subject, $message, $headers)) {
-        error_log("Welcome email sent to $to.");
-    } else {
-        error_log("Failed to send welcome email to $to.");
-    }
-}
-

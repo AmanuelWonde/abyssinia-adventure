@@ -32,11 +32,9 @@ const useFormSubmit = () => {
           data
         );
         if (res.data.success) {
-          // setFormData(null);
-          console.log("you are logged")
+          setFormData(null);
           navigate("/auth/login");
         } else {
-          console.log("you are not logged")
           alert(res.data.errors);
         }
       } catch (error) {
