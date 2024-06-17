@@ -1,8 +1,8 @@
 <?php
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: *"); // Allow requests from any origin
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET");
-// header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 // Include database configuration
 include_once '../config/database.php';
@@ -17,7 +17,7 @@ if ($db === null) {
     die(json_encode(array("message" => "Database connection failed.")));
 }
 
-$query = "SELECT id, first_name, last_name, email, country, phone, profile_image, gender FROM users";
+$query = "SELECT id, first_name, last_name, email, country, phone_number AS phone, profile_image, gender FROM user";
 
 $stmt = $db->prepare($query);
 
@@ -29,10 +29,11 @@ if ($stmt === false) {
 $stmt->execute();
 $users = array();
 
-while( $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $users[] = $row;
 }
 
 echo json_encode(array("success" => true, "data" => $users));
 
 $db = null;
+
