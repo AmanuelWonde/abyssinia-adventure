@@ -34,7 +34,7 @@ const SignIn = () => {
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:8000/auth/signIn.php",
+        "http://localhost/abyssinia-adventure/server/auth/signIn.php",
         credential
       );
 

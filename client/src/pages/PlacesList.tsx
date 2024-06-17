@@ -38,7 +38,7 @@ const PlacesList = () => {
     const getHouses = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/place/getPlaces.php?category=${category}`
+          `http://localhost/abyssinia-adventure/server/place/getPlaces.php?category=${category}`
         );
         if (res.statusText === "OK") {
           console.log(res);

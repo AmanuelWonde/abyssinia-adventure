@@ -5,7 +5,7 @@ class Database
     private $host = 'localhost';
     private $db_name = 'abyssinia_adventures';
     private $username = 'root';
-    private $password = 'wonde67@AM';
+    private $password = 'Gurmu@123';
     public $conn;
 
     public function getConnection()

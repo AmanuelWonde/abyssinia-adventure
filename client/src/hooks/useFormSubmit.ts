@@ -28,13 +28,15 @@ const useFormSubmit = () => {
       setLoading(true);
       try {
         const res = await axios.post(
-          `http://localhost:8000/auth/signup.php`,
+          `http://localhost/abyssinia-adventure/server/auth/signup.php`,
           data
         );
         if (res.data.success) {
-          setFormData(null);
+          // setFormData(null);
+          console.log("you are logged")
           navigate("/auth/login");
         } else {
+          console.log("you are not logged")
           alert(res.data.errors);
         }
       } catch (error) {

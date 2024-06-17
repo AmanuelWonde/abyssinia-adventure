@@ -27,7 +27,7 @@ const DetailsPage = () => {
     const getPlaces = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/place/getPlaceById.php?id=${id}`
+          `http://localhost/abyssinia-adventure/server/place/getPlaceById.php?id=${id}`
         );
         if (res.statusText === "OK") {
           console.log(res);

@@ -70,7 +70,7 @@ const PostPlace = () => {
     });
     try {
       const res = await axios.post(
-        "http://localhost:8000/place/postPlace.php",
+        "http://localhost/abyssinia-adventure/server/place/postPlace.php",
         formData,
         {
           headers: {
